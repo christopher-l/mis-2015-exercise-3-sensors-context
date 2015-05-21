@@ -43,7 +43,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     ViewPager mViewPager;
     private SensorManager mSensorManager;
     private Sensor mSensor;
-    private SensorHandler mSensorHandler;
+    public SensorHandler mSensorHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
