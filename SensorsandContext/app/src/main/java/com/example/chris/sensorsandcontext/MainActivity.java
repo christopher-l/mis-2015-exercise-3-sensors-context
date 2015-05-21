@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 
@@ -44,6 +45,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     private SensorManager mSensorManager;
     private Sensor mSensor;
     public SensorHandler mSensorHandler;
+    private SeekBar mSeekBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,16 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         mSensorHandler = new SensorHandler(this);
     }
 
+    @Override
+    public void onAttachFragment(Fragment fragment) {
+        if (mSeekBar == null) {
+            mSeekBar = (SeekBar) findViewById(R.id.seekbar1);
+            if (mSeekBar != null) {
+                SeekBarListener listener = new SeekBarListener();
+                mSeekBar.setOnSeekBarChangeListener(listener);
+            }
+        }
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -166,6 +178,24 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         }
     }
 
+
+    private class SeekBarListener implements SeekBar.OnSeekBarChangeListener {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            mSensorManager.unregisterListener(mSensorHandler);
+            mSensorManager.registerListener(mSensorHandler, mSensor, progress);
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    }
 
 
     @Override

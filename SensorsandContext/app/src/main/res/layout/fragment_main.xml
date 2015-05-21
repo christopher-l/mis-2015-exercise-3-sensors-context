@@ -22,6 +22,8 @@
         android:id="@+id/seekbar1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:max="3"
+        android:progress="3"
         />
 
 </LinearLayout>

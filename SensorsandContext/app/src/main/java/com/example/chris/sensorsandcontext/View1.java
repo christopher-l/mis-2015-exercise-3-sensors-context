@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.SeekBar;
 
 /**
  * Created by chris on 5/20/15.
@@ -52,7 +53,6 @@ public class View1 extends View{
             mPaths[i].transform(mMatrix);
         }
         double magnitude = Math.sqrt(values[0]*values[0] + values[1]*values[1] + values[2]*values[2]);
-        System.out.println((1 - (float) (magnitude / MAX_VALUE)) * getHeight());
         mPaths[3].lineTo(getWidth(), (1 - (float) (magnitude / MAX_VALUE)) * getHeight());
         mPaths[3].transform(mMatrix);
     }
