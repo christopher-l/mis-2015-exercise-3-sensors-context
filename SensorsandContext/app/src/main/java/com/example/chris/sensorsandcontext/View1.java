@@ -20,8 +20,9 @@ public class View1 extends View{
     private SensorHandler mSensorHandler;
     private Paint mPaint;
     private Matrix mMatrix;
-    private Path[] mPaths;
+    private Path[][] mPaths;
     private int mCounter = 0;
+    private int mActivePath = 0;
 
     public View1(Context context, AttributeSet attrs){
         super(context, attrs);
@@ -33,9 +34,11 @@ public class View1 extends View{
         mPaint.setStyle(Paint.Style.STROKE);
         mMatrix = new Matrix();
         mMatrix.preTranslate(-5, 0);
-        mPaths = new Path[4];
-        for (int i=0; i<4; i++) {
-            mPaths[i] = new Path();
+        mPaths = new Path[2][4];
+        for (int j=0; j<2; j++) {
+            for (int i = 0; i < 4; i++) {
+                mPaths[j][i] = new Path();
+            }
         }
     }
 
@@ -45,25 +48,30 @@ public class View1 extends View{
 
 
     public void addValues(float[] values) {
-        if (mCounter++ % 800 == 0) {
+        if (mCounter++ == 300) {
             resetPaths(); // Too large paths cannot be rendered
         }
-        for (int i=0; i<3; i++) {
-            mPaths[i].lineTo(getWidth(), normalize(values[i]) * ((float) getHeight() - 1));
-            mPaths[i].transform(mMatrix);
-        }
         double magnitude = Math.sqrt(values[0]*values[0] + values[1]*values[1] + values[2]*values[2]);
-        mPaths[3].lineTo(getWidth(), (1 - (float) (magnitude / MAX_VALUE)) * getHeight());
-        mPaths[3].transform(mMatrix);
+        for (int j=0; j<2; j++) {
+
+            for (int i = 0; i < 3; i++) {
+                mPaths[j][i].lineTo(getWidth(), normalize(values[i]) * ((float) getHeight() - 1));
+                mPaths[j][i].transform(mMatrix);
+            }
+            mPaths[j][3].lineTo(getWidth(), (1 - (float) (magnitude / MAX_VALUE)) * getHeight());
+            mPaths[j][3].transform(mMatrix);
+        }
     }
 
     private void resetPaths() {
         for (int i = 0; i < 3; i++) {
-            mPaths[i].reset();
-            mPaths[i].moveTo(getWidth(), getHeight() / 2);
+            mPaths[mActivePath][i].reset();
+            mPaths[mActivePath][i].moveTo(getWidth(), getHeight() / 2);
         }
-        mPaths[3].reset();
-        mPaths[3].moveTo(getWidth(), getHeight());
+        mPaths[mActivePath][3].reset();
+        mPaths[mActivePath][3].moveTo(getWidth(), getHeight());
+        mCounter = 0;
+        mActivePath = (mActivePath + 1) % 2;
     }
 
 
@@ -76,12 +84,12 @@ public class View1 extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         mPaint.setColor(Color.RED);
-        canvas.drawPath(mPaths[0], mPaint);
+        canvas.drawPath(mPaths[mActivePath][0], mPaint);
         mPaint.setColor(Color.GREEN);
-        canvas.drawPath(mPaths[1], mPaint);
+        canvas.drawPath(mPaths[mActivePath][1], mPaint);
         mPaint.setColor(Color.BLUE);
-        canvas.drawPath(mPaths[2], mPaint);
+        canvas.drawPath(mPaths[mActivePath][2], mPaint);
         mPaint.setColor(Color.WHITE);
-        canvas.drawPath(mPaths[3], mPaint);
+        canvas.drawPath(mPaths[mActivePath][3], mPaint);
     }
 }

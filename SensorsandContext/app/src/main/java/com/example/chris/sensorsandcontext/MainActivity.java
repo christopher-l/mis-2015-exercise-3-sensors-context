@@ -201,7 +201,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(mSensorHandler, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (mSeekBar == null) {
+            mSensorManager.registerListener(mSensorHandler, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        } else {
+            mSensorManager.registerListener(mSensorHandler, mSensor, mSeekBar.getProgress());
+        }
     }
 
     @Override
