@@ -11,6 +11,8 @@ public class SensorHandler implements SensorEventListener {
 
     private MainActivity mActivity;
     private View1 mView1;
+    private View2 mView2;
+
 
     public SensorHandler(MainActivity activity) {
         mActivity = activity;
@@ -18,6 +20,10 @@ public class SensorHandler implements SensorEventListener {
 
     public void setView1(View1 view1) {
         mView1 = view1;
+    }
+
+    public void setView2(View2 view2) {
+        mView2 = view2;
     }
 
     @Override
@@ -32,6 +38,11 @@ public class SensorHandler implements SensorEventListener {
         if (mView1 != null) {
             mView1.addValues(event.values);
             mView1.invalidate();
+        }
+
+        if (mView2 != null) {
+            mView2.addValues(event.values);
+            mView2.invalidate();
         }
     }
 
